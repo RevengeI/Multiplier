@@ -203,6 +203,7 @@ input[type=number] {
 }
 
 .rightWrongCount{
+  font-size: 1.5vw;
   display: none;
   justify-content: space-around;
   width: 100%;
@@ -227,6 +228,7 @@ input[type=number] {
   }
 
   .rightWrongCount{
+    font-size: 4vw;
     flex-direction: column;
     align-items: center;
     gap: 10px;
