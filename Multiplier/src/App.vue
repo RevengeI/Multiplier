@@ -1,34 +1,39 @@
 <template>
-  <div class="template">
+  <main class="template">
 
     <div id="backgroundAnswer" class="backgroundAnswer" @click="backToGame"></div>
     
     <div class="main">
-      <h1 class="title" v-if="!game">Проверьте свои знания!</h1>
-      <button class="startButton" @click="startGame" v-if="!game">Начать!</button>
 
-      <div class="rightWrongCount" v-if="game">
+      <section class="rightWrongCount" v-if="game">
         <div class="rightCount">Верные ответы: {{rightCount}}</div>
         <div class="wrongCount">Ошибки: {{wrongCount}}</div>
-      </div>
+      </section>
+
       <div class="clue" v-if="game">Вычислите значение и впишите ответ в строку:</div>
-      <div class="example" v-if="game">
+
+      <section class="example" v-if="game">
         <div class="number">{{this.firstNumber}}</div>
         <div class="sign">X</div>
         <div class="number">{{this.secondNumber}}</div>
-      </div>
-      <div class="result" v-if="game">
+      </section>
+
+      <h1 class="title" v-else>Проверьте свои знания!</h1>
+
+      <section class="result" v-if="game">
         <button class="result__button" @click="returnMenu">Вернуться в меню</button>
         <input type="number" class="answer" placeholder="Введите ответ" v-model="userAnswer"/>
         <button class="result__button" @click="checkResult">Проверить</button>
-      </div>
+      </section>
+
+      <button class="startButton" @click="startGame" v-else>Начать!</button>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 
-import { random, floor } from 'mathjs'
+import { random } from 'mathjs'
 
 export default {
   data(){
@@ -51,20 +56,17 @@ export default {
     },
 
     returnMenu(){
-      this.rightCount = 0
-      this.wrongCount = 0
-      this.userAnswer =  0
-      this.game = false
+      this.rightCount = this.wrongCount = this.userAnswer = this.game = 0
     },
 
     generationNumbers(){
-      this.firstNumber = floor(random(1, 10))
-      this.secondNumber = floor(random(1, 10))
+      this.firstNumber = ~~random(1, 10)
+      this.secondNumber = ~~random(1, 10)
       this.answer = this.firstNumber * this.secondNumber
     },
 
     checkResult(){
-      this.result = this.answer === this.userAnswer ? true : false
+      this.result = this.answer === this.userAnswer
       this.result === true ? this.rightCount++ : this.wrongCount++
       console.log(this.rightCount, this.wrongCount)
       this.userAnswer = ""
@@ -75,7 +77,8 @@ export default {
     backgroundColor(){
       let background = document.getElementById("backgroundAnswer")
       background.style.display = "block"
-      this.result === true ? background.style.backgroundColor = "green" : background.style.backgroundColor = "red"
+      background.style.backgroundColor = this.result === true ? "green" : "red"
+      setTimeout(this.backToGame, 1000)
     },
 
     backToGame(){
