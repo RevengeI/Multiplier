@@ -1,20 +1,23 @@
 <template>
   <div class="template">
+
     <div id="backgroundAnswer" class="backgroundAnswer" @click="backToGame"></div>
+    
     <div class="main">
-      <h1 id="title" class="title">Проверьте свои знания!</h1>
-      <button id="startButton" class="startButton" @click="startGame">Начать!</button>
-      <div class="rightWrongCount game">
+      <h1 class="title" v-if="!game">Проверьте свои знания!</h1>
+      <button class="startButton" @click="startGame" v-if="!game">Начать!</button>
+
+      <div class="rightWrongCount" v-if="game">
         <div class="rightCount">Верные ответы: {{rightCount}}</div>
         <div class="wrongCount">Ошибки: {{wrongCount}}</div>
       </div>
-      <div class="clue game">Вычислите значение и впишите ответ в строку:</div>
-      <div class="example game">
+      <div class="clue" v-if="game">Вычислите значение и впишите ответ в строку:</div>
+      <div class="example" v-if="game">
         <div class="number">{{this.firstNumber}}</div>
         <div class="sign">X</div>
         <div class="number">{{this.secondNumber}}</div>
       </div>
-      <div class="result game">
+      <div class="result" v-if="game">
         <button class="result__button" @click="returnMenu">Вернуться в меню</button>
         <input type="number" class="answer" placeholder="Введите ответ" v-model="userAnswer"/>
         <button class="result__button" @click="checkResult">Проверить</button>
@@ -30,6 +33,7 @@ import { random, floor } from 'mathjs'
 export default {
   data(){
     return{
+      game: false,
       firstNumber: 0,
       secondNumber: 0,
       answer: 0,
@@ -42,27 +46,15 @@ export default {
   
   methods: {
     startGame() {
-      document.getElementById("title").style.display="none"
-      document.getElementById("startButton").style.display="none"
-
-      let gameElements = document.querySelectorAll('.game')
-      for (let elem of gameElements) {
-        elem.style.display="flex"
-      }
+      this.game = true
       this.generationNumbers()
     },
 
     returnMenu(){
-      document.getElementById("title").style.display="block"
-      document.getElementById("startButton").style.display="block"
-
-      let gameElements = document.querySelectorAll('.game')
-      for (let elem of gameElements) {
-        elem.style.display="none"
-      }
       this.rightCount = 0
       this.wrongCount = 0
       this.userAnswer =  0
+      this.game = false
     },
 
     generationNumbers(){
@@ -167,10 +159,6 @@ button:hover{
   font-size: 100px;
 }
 
-.game{
-  display: none;
-}
-
 .answer{
   width: 20vw;
   height: 20vh;
@@ -191,6 +179,7 @@ input[type=number] {
 }
 
 .result{
+  display: flex;
   gap:30px;
   align-items: center;
   justify-content: space-around;
@@ -204,7 +193,7 @@ input[type=number] {
 
 .rightWrongCount{
   font-size: 1.5vw;
-  display: none;
+  display: flex;
   justify-content: space-around;
   width: 100%;
 }
