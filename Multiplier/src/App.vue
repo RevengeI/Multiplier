@@ -223,6 +223,7 @@ input[type=number] {
 
   .startButton{
     font-size: 5vw;
+    padding: 20px 30px;
   }
 
   .rightWrongCount{
